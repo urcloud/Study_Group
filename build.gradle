@@ -1,63 +1,91 @@
+//플러그인 설정, Java프로젝트로 설정, Spring Boot 플러그인 추가
+//Spring 의존성 관리 플러그인 추가, 버전 충돌 없이 필요한 라이브러리를 관리할 수 있게 도와줌
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.0'
     id 'io.spring.dependency-management' version '1.1.5'
 }
 
+//저장소 설정,  Maven Central Repository에서 필요한 라이브러리를 다운로드함
 repositories {
     mavenCentral()
 }
 
+//프로젝트의 그룹 ID 설정
+//프로젝트 버전을 0.0.1-SNAPSHOT으로 설정(SNAPSHOT=개발 중인 버전)
 group = 'curt'
 version = '0.0.1-SNAPSHOT'
 
+//Java 17을 사용하도록 설정
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
+//컴파일 시에만 필요한 의존성을 지정 (annotationProcessor가 필요할 때만 적용됨)
+//annotationProcessor는 컴파일 시 특정 애노테이션을 처리하여 코드 자동 생성 등의 작업을 수행
+//compileOnly로 설정하면 빌드 후 실행 파일(JAR)에 포함되지 않아 파일 크기가 작아지고 성능이 최적화됨
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
 }
 
+//의존성 추가
 dependencies {
+    //JPA, Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    //email 전송기능
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    //입력값 검증 (API 요청 데이터 검증, DTO 입력값 검증, requestparam 값 검증 등)
+    //API 요청 시 잘못된 데이터를 사전에 차단하는 역할
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    //코드 간결화
     compileOnly 'org.projectlombok:lombok'
 
-    //swagger
+    //swagger, API문서 자동화
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
-    //JWT
+    //JWT 토큰 생성 및 검증
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
-    // redis
+    // redis, 캐싱
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.redisson:redisson-spring-boot-starter:3.17.4'
 
-    //spring_batch
+    //spring batch, 배치작업
     implementation 'org.springframework.boot:spring-boot-starter-batch'
 
+    //MySQL 데이터베이스 연결
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
 
+    // JUnit 5, Mockito 등 테스트 라이브러리
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    //Spring Security와 관련된 테스트 기능
     testImplementation 'org.springframework.security:spring-security-test'
 
-    testImplementation "org.testcontainers:testcontainers:1.19.8"
+    //테스트 환경 구성
+    //testImplementation "org.testcontainers:testcontainers:1.19.8"
     testImplementation "org.testcontainers:junit-jupiter:1.19.8"
 
+    //JUnit 테스트 실행을 위한 런처
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+//JUnit 5 기반 테스트 실행을 설정
+//Gradle의 test라는 기본 테스트 실행 Task를 가져옴
+//Gradle에서 테스트 실행은 test Task를 통해 이루어짐
+//이때 테스트 실행 환경을 JUnit으로 지정한 것
+//이 설정대로라면 JUnit 5 기반의 테스트 코드만 실행되도록 함
 tasks.named('test') {
     useJUnitPlatform()
 }
