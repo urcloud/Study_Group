@@ -23,62 +23,9 @@ java {
     }
 }
 
-//컴파일 시에만 필요한 의존성을 지정 (annotationProcessor가 필요할 때만 적용됨)
-//annotationProcessor는 컴파일 시 특정 애노테이션을 처리하여 코드 자동 생성 등의 작업을 수행
-//compileOnly로 설정하면 빌드 후 실행 파일(JAR)에 포함되지 않아 파일 크기가 작아지고 성능이 최적화됨
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
 //의존성 추가
 dependencies {
-    //JPA, Spring Security
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-
-    //email 전송기능
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-
-    //입력값 검증 (API 요청 데이터 검증, DTO 입력값 검증, requestparam 값 검증 등)
-    //API 요청 시 잘못된 데이터를 사전에 차단하는 역할
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-    //코드 간결화
-    compileOnly 'org.projectlombok:lombok'
-
-    //swagger, API문서 자동화
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
-
-    //JWT 토큰 생성 및 검증
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
-    implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
-    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
-
-    // redis, 캐싱
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'org.redisson:redisson-spring-boot-starter:3.17.4'
-
-    //spring batch, 배치작업
-    implementation 'org.springframework.boot:spring-boot-starter-batch'
-
-    //MySQL 데이터베이스 연결
-    runtimeOnly 'com.mysql:mysql-connector-j'
-    annotationProcessor 'org.projectlombok:lombok'
-
-    // JUnit 5, Mockito 등 테스트 라이브러리
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-    //Spring Security와 관련된 테스트 기능
-    testImplementation 'org.springframework.security:spring-security-test'
-
-    //테스트 환경 구성
-    //testImplementation "org.testcontainers:testcontainers:1.19.8"
-    testImplementation "org.testcontainers:junit-jupiter:1.19.8"
-
-    //JUnit 테스트 실행을 위한 런처
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.3.2.RELEASE'
 }
 
 //JUnit 5 기반 테스트 실행을 설정
