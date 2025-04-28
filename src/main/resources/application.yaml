@@ -13,8 +13,11 @@ spring:
     hibernate:
       #애플리케이션 시작 시 테이블 자동 생성
       #create는 테이블 생성 후 유지됨(초기 개발단계), create-drop은 새로운 테이블 생성 후 종료 시 테이블 삭제(테스트 환경)
+      # 개발 초기에: create-drop, 개발 중후반 / QA 환경: update 또는 validate, 운영(배포)할 때: none 또는 validate (DDL은 직접 관리)
       ddl-auto: create-drop
     properties:
+      # SpringBoot가 시작되면서 application.yaml을 읽고, spring.jpa 하위 설정들을 찾아봄
+      # spring.jpa.hibernate.ddl-auto를 통해 Hibernate의 스키마 생성 전략을 설정
       hibernate:
         #SQL을 보기 좋게 정렬
         format_sql: true

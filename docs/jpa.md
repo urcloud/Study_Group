@@ -10,6 +10,9 @@
 * JPA와 Hibernate의 관꼐는 자바의 interface와 해당 interface를 구현한 class와 같은 관계
 * Hibernate는 JPA의 모든 기능을 지원하며 객체와 관계형 데이터베이스 간의 매핑을 자동으로 처리해서 개발자가 일일이 SQL쿼리를 작성하지 않도록 도와줌
 * JPA를 사용하기 위해서 반드시 Hibernate만을 사용할 필요는 없음 (다른 JPA 구현체를 사용해도 됨)
+* Hibernate가 SQL을 직접 사용하지 않는다고 해서 JDBC API를 사용하지 않는 것은 아님
+* Hibernate가 지원하는 메소드 내부에서는 JDBC API가 동작하고 있으며, 단지 개발자가 직접 SQL을 작성하지 않을 뿐
+* JPA의 핵심인 EntityManagerFactory , EntityManager , EntityTransaction 을 Hibernate에서는 각각 SessionFactory , Session , Transaction 으로 상속받고 각각 Impl로 구현하고 있음
 
 ## Spring Data JPA란?
 * JPA 기반 애플리케이션 개발을 보다 간편하게 만드는 라이브러리
@@ -43,6 +46,15 @@
 * JPA는 한 요청 당 하나의 EntityManager을 사용하고, 각 EntityManager들은 정해진 영속성 컨텍스트를 참조하게 됨
 * 이렇게 만들어진 EntityManager로 데이터를 다루려면 가장 먼저 Entity가 영속화 되어 있어야 함
 > ex) 요청 - EntityManager 생성 - Entity들을 영속성 컨텍스트에 생성하고 Entity 영속화 - EntityManager가 영속성 컨텍스트 기반으로 CRUD 요청 처리
+
+## Database, Datasource, Hibernate, JPA 상호작용
+* 코드에서 Repository, Entity 등을 작성하면 JPA가 Repository 요청을 인터페이스로 받음
+* 내부에서 Hibernate가 Entity를 SQL로 변환해서 DataSource를 통해 Database로 쿼리를 날림
+* Database가 결과를 주면 다시 객체로 변환해서 리턴
+* 코드 (JPA) → SQL (Hibernate) → DB 연결 (Datasource) → Database
+* Database는 MySQL 등 진짜 데이터가 있는 곳, Datasource는 DB 연결을 관리하는 객체
+* Hibernate는 객체(Entity)를 SQL로 변환하고 SQL 결과를 객체로 다시 바꾸는 라이브러리, JPA는 Java 코드로 DB를 다룰 수 있게 만든 API 표준
+* Spring Boot Starter (spring-boot-starter-data-jpa)를 쓰면 DataSource는 자동 생성, Hibernate는 JPA 구현체로 자동 설정, JPA (EntityManagerFactory)도 자동 설정
 
 ## 좋아요한 사람들 배열로 집어넣을 수 있는지?
 * JPA 엔티티 설계에서는 배열로  여러 members를 직접 study 안에 저장하는 식으로 매핑할 수 없음
