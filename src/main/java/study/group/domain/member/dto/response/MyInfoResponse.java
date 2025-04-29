@@ -11,21 +11,25 @@ import study.group.domain.member.entity.Member;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginResponse {
+public class MyInfoResponse {
 
   private long memberId;
   private String name;
   private int age;
   private String nickName;
   private String email;
+  private LocalDateTime createdAt;
+  private LocalDateTime modifiedAt;
 
-  public static LoginResponse toDto(Member member) {
-    return LoginResponse.builder()
+  public static MyInfoResponse toDto(Member member) {
+    return MyInfoResponse.builder()
         .memberId(member.getId())
         .name(member.getName())
         .age(member.getAge())
         .nickName(member.getNickName())
         .email(member.getEmail())
+        .createdAt(member.getCreatedAt())
+        .modifiedAt(member.getModifiedAt())
         .build();
   }
 }
