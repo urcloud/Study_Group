@@ -1,8 +1,6 @@
 package study.group.global.exception;
 
 import jakarta.annotation.Priority;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 //서비스 코드에서 예외 발생 - CustomException(혹은 하위 클래스) throw - GlobalExceptionHandler에서 해당 Exception 잡음
 //ErrorResult 생성 - ErrorResponse로 wrapping - HTTP 응답 + JSON 반환
