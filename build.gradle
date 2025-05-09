@@ -26,6 +26,11 @@ java {
 //컴파일 시에만 필요한 의존성을 지정 (annotationProcessor가 필요할 때만 적용됨)
 //annotationProcessor는 컴파일 시 특정 애노테이션을 처리하여 코드 자동 생성 등의 작업을 수행
 //compileOnly로 설정하면 빌드 후 실행 파일(JAR)에 포함되지 않아 파일 크기가 작아지고 성능이 최적화됨
+//compileOnly 설정에 annotationProcessor 의존성을 포함시켜주기 위한 것
+//annotationProcessor에 지정된 라이브러리를 compileOnly에도 자동으로 포함시키는 역할을 함
+//Lombok은 컴파일 타임에 어노테이션을 처리하지만, 런타임에는 필요 없음. 그래서 보통 compileOnly로 설정하는데, 실제로 어노테이션을 처리하려면 annotationProcessor에도 등록되어야 함
+//이 설정을 하면 annotationProcessor에 넣은 lombok이 compileOnly에도 포함되어 중복으로 작성할 필요가 없음
+//즉, compileOnly에 따로 lombok을 안 쓰고도 인식되게 하려는 편의 설정
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -47,6 +52,7 @@ dependencies {
 
     //MySQL 데이터베이스 연결
     runtimeOnly 'com.mysql:mysql-connector-j'
+    //이건 Lombok 어노테이션을 실제로 처리해주는 라이브러리를 추가하는 부분으로, Lombok 기능을 쓰기 위해 꼭 필요함
     annotationProcessor 'org.projectlombok:lombok'
 
     // JUnit 5, Mockito 등 테스트 라이브러리
