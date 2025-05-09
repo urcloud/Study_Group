@@ -22,8 +22,9 @@ public enum ErrorCode {
   EMAIL_DUPLICATION(409, "M001", "이미 등록된 이메일입니다."),
   NICKNAME_DUPLICATION(409, "M002", "이미 존재하는 닉네임입니다."),
   PASSWORD_MISMATCH(400, "M003", "패스워드가 일치하지 않습니다."),
-  USER_NOT_FOUND(404, "M004", "존재하지 않는 회원 정보입니다"),
+  MEMBER_NOT_FOUND(404, "M004", "존재하지 않는 회원 정보입니다"),
   NICKNAME_CHANGE_FAILED(400, "M005", "30일 후 닉네임 변경이 가능합니다."),
+  LOGIN_FIRST(401, "M006", "로그인이 되어있지 않습니다."),
 
   // Study
   STUDY_NOT_FOUND(404, "S001", "존재하지 않는 글입니다."),
