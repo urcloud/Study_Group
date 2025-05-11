@@ -7,6 +7,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,6 +20,7 @@ import study.group.domain.comment.entity.Comment;
 import study.group.domain.likes.entity.Likes;
 import study.group.domain.member.entity.Member;
 import study.group.global.entity.BaseEntity;
+
 @Entity
 @Getter
 @AllArgsConstructor
@@ -52,8 +54,9 @@ public class Study extends BaseEntity {
   @JoinColumn(name = "member_id", nullable = false)
   private Member member;
 
-  @OneToMany(mappedBy = "study", cascade = CascadeType.ALL)
-  private List<Category> categories;
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "category_id", nullable = false)
+  private Category category;
 
   @OneToMany(mappedBy = "study", cascade = CascadeType.ALL)
   private List<Apply> applies;

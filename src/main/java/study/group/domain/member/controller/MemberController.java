@@ -3,7 +3,6 @@ package study.group.domain.member.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,7 +38,6 @@ public class MemberController {
   public void logout(HttpSession session) {
     memberService.logout(session);
   }
-
 
   //정보조회
   @GetMapping("/api/users/info")

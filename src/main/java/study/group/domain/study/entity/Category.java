@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,7 +30,6 @@ public class Category extends BaseEntity {
   @Column(nullable = false)
   private String addrGu;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "study_id", nullable = false)
+  @OneToOne(mappedBy = "category")
   private Study study;
 }
