@@ -1,5 +1,6 @@
 package study.group.domain.member.service;
 
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,8 @@ public class MemberService {
                     .age(signupRequest.getAge())
                         .nickName(signupRequest.getNickName())
                             .email(signupRequest.getEmail())
-                                .password(passwordEncoder.encode(signupRequest.getPassword()))
+                                .createdAt(LocalDateTime.now())
+                                    .password(passwordEncoder.encode(signupRequest.getPassword()))
         .build();
 
     memberRepository.save(member);

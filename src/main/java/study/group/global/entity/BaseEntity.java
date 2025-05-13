@@ -37,5 +37,5 @@ public class BaseEntity {
   @LastModifiedDate
   @Column(name = "updated_at")
   @Temporal(TemporalType.TIMESTAMP)
-  private LocalDateTime modifiedAt;
+  protected LocalDateTime modifiedAt;
 }

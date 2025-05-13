@@ -36,7 +36,7 @@ public class Study extends BaseEntity {
   private String content;
 
   @Column(nullable = false)
-  private LocalDateTime ClosedAt;
+  private LocalDateTime closedAt;
 
   @Column(nullable=false)
   private int limitedPeople;
@@ -66,4 +66,14 @@ public class Study extends BaseEntity {
 
   @OneToMany(mappedBy = "study", cascade = CascadeType.ALL)
   private List<Comment> comments;
+
+  public void update(LocalDateTime modifiedAt, String title, String content, LocalDateTime closedAt, int limitedPeople, boolean online, Category category) {
+    this.modifiedAt = modifiedAt;
+    this.title = title;
+    this.content = content;
+    this.closedAt = closedAt;
+    this.limitedPeople = limitedPeople;
+    this.online = online;
+    this.category = category;
+  }
 }

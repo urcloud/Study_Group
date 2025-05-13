@@ -17,6 +17,7 @@ public enum ErrorCode {
   NOT_FOUND(404, "C002", "Not Found"),
   NO_QUERY_RESULT(404, "C003", "No Query Result"),
   DATETIME_INVALID(400, "C004", "유효하지 않은 날짜입니다"),
+  NO_AUTHORIZATION(401, "C005", "권한이 없습니다"),
 
   // Member
   EMAIL_DUPLICATION(409, "M001", "이미 등록된 이메일입니다."),
