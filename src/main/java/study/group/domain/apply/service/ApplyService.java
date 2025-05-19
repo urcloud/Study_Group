@@ -2,6 +2,7 @@ package study.group.domain.apply.service;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,10 @@ public class ApplyService {
     Study study = studyRepository.findById(studyId)
         .orElseThrow(() -> new NotFoundException(ErrorCode.STUDY_NOT_FOUND));
 
+    if (study.getClosedAt().isBefore(LocalDateTime.now()) || study.getCurrentPeople() >= study.getLimitedPeople()) {
+      throw new InvalidValueException(ErrorCode.APPLY_FAILED);
+    }
+
     Member member = memberRepository.findById((Long) session.getAttribute("userId"))
         .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
@@ -63,6 +68,10 @@ public class ApplyService {
 
     Member member = memberRepository.findById((Long) session.getAttribute("userId"))
         .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+
+    if (study.getClosedAt().isBefore(LocalDateTime.now()) || study.getCurrentPeople() >= study.getLimitedPeople()) {
+      throw new InvalidValueException(ErrorCode.CANCEL_APPLY_FAILED);
+    }
 
     Apply apply = applyRepository.findByMemberIdAndStudyId(member.getId(), study.getId())
         .orElseThrow(() -> new InvalidValueException(ErrorCode.APPLY_NOT_FOUND));

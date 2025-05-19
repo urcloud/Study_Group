@@ -33,8 +33,9 @@ public enum ErrorCode {
 
   // Apply
   APPLY_FAILED(400, "A001", "신청에 실패했습니다."),
-  APPLY_ALREADY(400, "A002", "이미 신청했습니다."),
-  APPLY_NOT_FOUND(404, "A003", "신청내역이 존재하지 않습니다."),
+  CANCEL_APPLY_FAILED(400, "A002", "신청 취소에 실패했습니다."),
+  APPLY_ALREADY(400, "A003", "이미 신청했습니다."),
+  APPLY_NOT_FOUND(404, "A004", "신청내역이 존재하지 않습니다."),
 
   // Like
   LIKED_FAILED(400, "L001", "관심목록 추가에 실패했습니다."),

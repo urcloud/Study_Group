@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import study.group.domain.apply.entity.Apply;
+import study.group.domain.apply.repository.ApplyRepository;
 import study.group.domain.likes.repository.LikesRepository;
 import study.group.domain.member.entity.Member;
 import study.group.domain.member.repository.MemberRepository;
@@ -27,6 +29,7 @@ public class StudyService {
   private final StudyRepository studyRepository;
   private final LikesRepository likesRepository;
   private final MemberRepository memberRepository;
+  private final ApplyRepository applyRepository;
 
   //스터디 모집 글 작성
   public WritingResponse recruitWriting(WritingRequest writingRequest, HttpSession session) {
@@ -58,6 +61,14 @@ public class StudyService {
         .build();
 
     studyRepository.save(study);
+
+    Apply apply = Apply.builder()
+        .member(member)
+        .study(study)
+        .build();
+
+    applyRepository.save(apply);
+
     return WritingResponse.toDto(study);
   }
 
