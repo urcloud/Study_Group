@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import study.group.domain.study.entity.Enum.AddrDo;
+import study.group.domain.study.entity.Enum.AddrGu;
+import study.group.domain.study.entity.Enum.CategoryType;
 
 @Getter
 @Builder
@@ -16,7 +19,7 @@ public class WritingRequest {
   private LocalDateTime closedAt;
   private int limitedPeople;
   private boolean online;
-  private String type;
-  private String regionDo;
-  private String regionGu;
+  private CategoryType type;
+  private AddrDo regionDo;
+  private AddrGu regionGu;
 }
