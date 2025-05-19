@@ -64,7 +64,6 @@ public class MemberService {
 
 
   //로그아웃
-
   public void logout(HttpSession session) {
     if(session.getAttribute("userId") == null) {
       throw new NotFoundException(ErrorCode.LOGIN_FIRST);

@@ -25,3 +25,7 @@
 - 모집 글 작성 CRUD까지
 
 ### 5/13
+- 락 세개 동작과정 자세히 예제 들어서
+- HttpSession session 로그인 동작과정 알아오기
+- 신청 로직 구현해오기
+- study랑 category 관계 수정
