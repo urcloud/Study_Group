@@ -1,6 +1,7 @@
 package study.group.domain.study.service;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import study.group.domain.study.dto.response.StudyListWrapper;
 import study.group.domain.study.dto.response.WritingResponse;
 import study.group.domain.study.entity.Category;
 import study.group.domain.study.entity.Study;
+import study.group.domain.study.repository.CategoryRepository;
 import study.group.domain.study.repository.StudyRepository;
 import study.group.global.exception.ErrorCode;
 import study.group.global.exception.InvalidValueException;
@@ -30,8 +32,10 @@ public class StudyService {
   private final LikesRepository likesRepository;
   private final MemberRepository memberRepository;
   private final ApplyRepository applyRepository;
+  private final CategoryRepository categoryRepository;
 
   //스터디 모집 글 작성
+  @Transactional
   public WritingResponse recruitWriting(WritingRequest writingRequest, HttpSession session) {
 
     if(session.getAttribute("userId") == null) {
@@ -41,11 +45,18 @@ public class StudyService {
     Member member = memberRepository.findById((Long) session.getAttribute("userId"))
         .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
-    Category category = Category.builder()
-        .type(writingRequest.getType())
-        .addrDo(writingRequest.getRegionDo())
-        .addrGu(writingRequest.getRegionGu())
-        .build();
+    Category category = categoryRepository.findByTypeAndAddrDoAndAddrGu(
+        writingRequest.getType(),
+        writingRequest.getRegionDo(),
+        writingRequest.getRegionGu()
+    ).orElseGet(() -> {
+      Category newCategory = Category.builder()
+          .type(writingRequest.getType())
+          .addrDo(writingRequest.getRegionDo())
+          .addrGu(writingRequest.getRegionGu())
+          .build();
+      return categoryRepository.save(newCategory);
+    });
 
     Study study = Study.builder()
         .createdAt(LocalDateTime.now())
@@ -74,6 +85,7 @@ public class StudyService {
 
 
   //스터디 모집 글 수정
+  @Transactional
   public WritingResponse recruitWritingUpdating(Long studyId, WritingRequest writingRequest, HttpSession session) {
     if(session.getAttribute("userId") == null) {
       throw new NotFoundException(ErrorCode.LOGIN_FIRST);
@@ -86,11 +98,18 @@ public class StudyService {
       throw new InvalidValueException(ErrorCode.NO_AUTHORIZATION);
     }
 
-    Category updatedCategory = Category.builder()
-        .type(writingRequest.getType())
-        .addrDo(writingRequest.getRegionDo())
-        .addrGu(writingRequest.getRegionGu())
-        .build();
+    Category updatedCategory = categoryRepository.findByTypeAndAddrDoAndAddrGu(
+        writingRequest.getType(),
+        writingRequest.getRegionDo(),
+        writingRequest.getRegionGu()
+    ).orElseGet(() -> {
+      Category newCategory = Category.builder()
+          .type(writingRequest.getType())
+          .addrDo(writingRequest.getRegionDo())
+          .addrGu(writingRequest.getRegionGu())
+          .build();
+      return categoryRepository.save(newCategory);
+    });
 
     study.update(
         LocalDateTime.now(),
