@@ -61,3 +61,25 @@
 * RDB(관계형 데이터베이스)는 배열 저장을 권장하지 않고 다대다 관계가 있을 때 Likes처럼 따로 중간 테이블로 풀어줘야 함 (정규화된 설계)
 * 배열 저장 방식은 NoSQL에서 주로 씀
 * 저장 공간 최적화 때문에 위 같은 고민중이라면 인프라, 운영 등으로 해결하는게 맞음. 요즘 DB는 좋아요 수천만 건 저장하는 데 문제가 없음 (Redis 캐시 활용)
+
+## DAO란?
+* DB에 직접 접근하여 데이터를 조회, 삽입, 수정, 삭제(CRUD) 하는 객체
+* JPA에서는 DAO를 Repository라는 이름으로 추상화하고 있음
+
+## DAO vs DTO
+* DTO는 데이터를 한 곳에서 다른 곳으로 옮기기 위한 객체
+* 주로 Controller ↔ Service ↔ View 사이에서 값 전달 용도로 사용함
+* DAO는 DB에 CRUD를 수행하는 기능 및 DB 접근 전담, DTO는 데이터를 포장해서 전달 및 데이터 전달 전담
+
+## @JoinColumn(name = "") 이름 명시하는 이유
+* Hibernate는 기본적으로 <필드명>_<참조하는 엔티티의 기본 키 이름> 규칙으로 컬럼 이름을 자동으로 만듦
+* 명확성과 가독성 향상 때문에 이름을 항상 명시함
+* 개발자 입장에서 DB 컬럼명이 정확히 뭔지 명확하게 알 수 있고, 자동 생성에 의존하지 않고, 읽는 순간 컬럼명이 보이기 때문에 이름을 명시함
+
+## @OneToMany 에서 private List<엔티티>로 선언하는 이유
+* JPA는 양방향 관계를 만들 수 있음
+* 예를 들어 Member 입장에서 comments, likes, studies 등 내가 가진 것들을 전부 List로 들고 있게 함
+* 나중에 member.getComments(), member.getLikes() 이런 식으로 조회할 수 있도록 설계한 것
+
+## @RestController, @RequestBody는 JSON만 가능한지?
+기본은 JSON이나, jackson-dataformat-xml 등 의존성을 추가하면 Spring의 메시지 컨버터(MessageConverter)가 지원하는 형식이면 뭐든 받을 수 있음
