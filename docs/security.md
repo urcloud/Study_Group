@@ -74,3 +74,20 @@
 
 5. 인증 성공
 > 비밀번호 일치 시, 인증된 Authentication 객체 생성, 이 객체를 SecurityContextHolder 에 저장함 (보안 컨텍스트)
+
+[사용자 요청]
+↓
+[Spring Security Filter Chain]
+↓
+[UsernamePasswordAuthenticationFilter]
+↓
+[AuthenticationManager]
+↓
+[AuthenticationProvider]
+↓
+[UserDetailsService.loadUserByUsername]
+↓
+[비밀번호 일치 확인]
+↓
+인증 성공 → SecurityContextHolder 저장 → 성공 핸들러 호출
+인증 실패 → 실패 핸들러 호출
