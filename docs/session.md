@@ -48,6 +48,7 @@
 * 이 토큰으로 사용자 정보 조회 및 로그인 처리
 
 ## OAuth2
+### 동작과정
 인가(클라이언트 애플리케이션이 인증된 사용자의 자원에 접근하기 위한 권한을 부여하는 것) 요청
 * 사용자를 구글이나 카카오 로그인 페이지로 리다읽트 함
 * Authorization Code 를 리다이렉트 URI로 전달
@@ -61,3 +62,53 @@
 
 자원 접근
 * 이 Access Token을 들고 사용자 정보 API에 요청
+
+> 사용자(Resource Owner)는 서비스(client)를 이용하기 위해 로그인 페이지에 접근
+> 
+> 그럼 서비스(client)는 사용자(Resource Owner)에게 로그인 페이지를 제공하게 됨
+> 로그인 페이지에서 사용자는 "페이스북/구글 으로 로그인" 버튼을 누름
+> 
+> 만일 사용자가 Login with Facebook 버튼을 클릭하게 되면, 특정한 url 이 페이스북 서버쪽으로 보내지게됨
+> 
+> 브라우저 응답(response) 헤더를 확인하면 다음 url내용을 확인 할 수 있음
+```
+https://resource.server/?client_id=1&scope=B,C&redirect_uri=https://client/callback
+``` 
+> 이는, 사용자가 직접 페이스북으로 이동해서 로그인을 입력해야 하는데, 저 링크가 대신 로그인으로 이동 하게끔 도와줌
+> 
+> redirect_uri 경로를 통해서 Resource Server는 client에게 임시비밀번호인 Authorization code를 제공함
+> 
+> 클라이언트로부터 보낸 서비스 정보와, 리소스 로그인 서버에 등록된 서비스 정보를 비교함
+>
+> 확인이 완료되면, Resource Server로 부터 전용 로그인 페이지로 이동하여 사용자에게 보여줌
+>
+> ID/PW를 적어서 로그인을 하게되면, client가 사용하려는 기능(scope)에 대해 Resource Owner의 동의(승인)을 요청함
+> 
+> Resource Owner가 Allow 버튼을 누르면 Resource Owner가 권한을 위임했다는 승인이 Resource Server 에 전달됨
+> 
+> 하지만, 이미 Owner가 Client에게 권한 승인을 했더라도 아직 Server가 허락하지 않음 
+> 
+> 따라서, Resource Server 도 Client에게 권한 승인을 하기위해 Authorization code를 Redirect URL을 통해 사용자에게 응답하고, 다시 사용자는 그대로 Client에게 다시 보냄
+> 
+> 이제 Client가 Resource Server에게 직접 url(클라이언드 아이디, 비번, 인증코드 ...등)을 보냄
+> 
+> 그럼 Resource Server는 Client가 전달한 정보들을 비교해서 일치한다면, Access Token을 발급하고 이제 필요없어진 Authorization code는 지움
+> 
+> 그렇게 토큰을 받은 Client는 사용자에게 최종적으로 로그인이 완료되었다고 응답
+> 
+> OAuth의 목적은 최종적으로 Access Token을 발급하는 것
+> 
+> Access Token이 기간이 만료되어 401에러가 나면, Refresh Token을 통해 Access Token을 재발급함
+
+
+## 멀티파트 폼데이터
+```html
+<form action="/upload" method="POST" enctype="multipart/form-data">
+  <input type="file" name="image" />
+  <button type="submit">업로드</button>
+</form>
+```
+* 이미지 파일을 문자로 생성하여 HTTP request body에 담아 서버로 전송하는 방법
+* 폼 데이터(Form Data)를 여러 파트로 나누어 전송
+* 파일 업로드 시 본인이 찍은 사진을 올리는 form의 경우 사진을 위한 설명인 input과 사진 파일을 위한 input이 2개가 들어가는데, 두 input 간에 content-type이 전혀 다름
+* 두 종류의 데이터가 하나의 Http Request Body에 들어가야 하는데, 한 body에서 이 2 종류의 데이터를 구분해서 넣어주는 방법이 필요해져서 multipart가 등장함

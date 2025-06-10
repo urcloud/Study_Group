@@ -70,6 +70,16 @@
 * 주인이 아닌 쪽에서는 외래키를 관리하지 않고, 조회용으로만 사용함
 * 부모 엔티티의 모든 상태 변화(PERSIST, REMOVE 등)를 연관 자식 엔티티에 자동 전파
 * 실수로 자식 엔티티를 따로 저장/삭제하는 일을 방지함
+* mappedBy = "study" 는 Likes 엔티티의 study 필드가 외래키 주인이라는 뜻
+* Study는 그 외래키로 연결된 Likes 목록을 조회만 하는 입장이라고 자동으로 인식함
+* 다대다는 자동인식이 아니라 연결 테이블을 가진 두 개의 연관관계로 보는 것
+
+
+### @OneToMany(mappedBy = "study", cascade = CascadeType.ALL) 
+### private List<Likes> likes;
+* DB 상의 연관관계는 유지되고, 단지 Java 객체 그래프에서의 "양방향 탐색 기능"만 없어지는 것
+* Likes쪽에 @ManyToOne(fetch = FetchType.LAZY)이 존재하기 때문에 study_id 외래키를 통해 Study와 N:1 관계로 연결되어 있음
+* 단순히 역으로 데이터를 조회하기 위한 객체 그래프 탐색 수단, Study 객체에서 getLikes()를 못 쓸 뿐이지, DB에서 Study ↔ Likes 관계가 없어지지는 않음
 
 
 ### @RestController
