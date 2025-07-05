@@ -112,3 +112,4 @@ https://resource.server/?client_id=1&scope=B,C&redirect_uri=https://client/callb
 * 폼 데이터(Form Data)를 여러 파트로 나누어 전송
 * 파일 업로드 시 본인이 찍은 사진을 올리는 form의 경우 사진을 위한 설명인 input과 사진 파일을 위한 input이 2개가 들어가는데, 두 input 간에 content-type이 전혀 다름
 * 두 종류의 데이터가 하나의 Http Request Body에 들어가야 하는데, 한 body에서 이 2 종류의 데이터를 구분해서 넣어주는 방법이 필요해져서 multipart가 등장함
+* 이미지를 multi로 잘라서 보내는 것
