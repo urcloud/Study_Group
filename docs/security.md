@@ -91,3 +91,14 @@
 ↓
 인증 성공 → SecurityContextHolder 저장 → 성공 핸들러 호출
 인증 실패 → 실패 핸들러 호출
+
+
+## AuthenticationProvider란?
+* 사용자의 인증을 검증하는 실제 주체로,  아이디와 비밀번호가 맞는지 확인하는 실제 로직을 담당하는 클래스
+1. 클라이언트 요청
+2. UsernamePasswordAuthenticationFilter 실행
+3. 요청에서 username, password 추출 → Authentication 객체 생성 (미인증 상태)
+4. AuthenticationManager가 Authentication 객체를 AuthenticationProvider에 전달
+5. AuthenticationProvider가 사용자 검증 수행 (DB에서 사용자 조회, 비밀번호 일치 여부 확인)
+6. 인증 성공 → 인증된 Authentication 객체 반환 (권한 포함)
+7. SecurityContext에 인증 객체 저장 → 로그인 완료

@@ -83,3 +83,12 @@
 
 ## @RestController, @RequestBody는 JSON만 가능한지?
 기본은 JSON이나, jackson-dataformat-xml 등 의존성을 추가하면 Spring의 메시지 컨버터(MessageConverter)가 지원하는 형식이면 뭐든 받을 수 있음
+
+
+## ManyToMany 어노테이션이 중간테이블을 만드는지?
+* @ManyToMany는 중간 테이블을 무조건 생성함 
+* 직접 엔티티를 만들지 않으면, JPA가 알아서 테이블을 생성하고 관리
+* @ManyToMany는 실무에서 거의 권장되지 않음
+* 중간 테이블에 추가 컬럼을 넣을 수 없고 관계 변경 추적이 어렵고 Cascade, orphanRemoval 같은 세밀한 연관관계 관리가 제한적임
+* @ManyToMany 어노테이션을 사용하면 JPA가 자동으로 중간 테이블을 생성해서 관리함
+
