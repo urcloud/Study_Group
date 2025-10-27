@@ -138,3 +138,6 @@ docker container rm --force $(docker container ls --all --quiet)
     - 어디서나 동일한 환경 제공
     - 격리 + 밀집 동시 달성
     - 빠른 실행과 리소스 효율
+
+
++ 이미지 vs 컨테이너 구분해오기
