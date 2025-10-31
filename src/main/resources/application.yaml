@@ -34,7 +34,8 @@ spring:
     #로컬에서 실행되는 DB 사용
     #MySQL 기본 포트 사용
     #사용할 데이터베이스 이름
-    url: jdbc:mysql://localhost:3306/studygroup
+    #포트는 컨테이너 내부 포트 3306 유지 (3307은 호스트에서만 사용)
+    url: jdbc:mysql://mysql:3306/studygroup
     username: root
     password: 1234
     #MySQL의 JDBC 드라이버 클래스 (MySQL 8.x 버전)
