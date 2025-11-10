@@ -1,5 +1,5 @@
 # 베이스 이미지로 OpenJDK 17 사용
-FROM openjdk:17-jdk-alpine
+FROM openjdk:17.0.2-oracle
 
 # 작업 디렉터리 설정
 WORKDIR /app
