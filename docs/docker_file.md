@@ -105,7 +105,7 @@ services:
     image: mysql:8.0
     container_name: study-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: 
       MYSQL_DATABASE: studygroup
     ports:
       - "3307:3306"
@@ -131,7 +131,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/studygroup
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_DATASOURCE_PASSWORD: 
     networks:
       - study-network
 
@@ -220,10 +220,43 @@ docker compose logs -f mysql
 docker ps
 ```
 
+# docker-compose.yaml 스프링 자바 내부 동작과정
+1. docker-compose CLI가 docker-compose.yaml을 읽음
+2. YAML을 파싱해서 서비스 목록, 의존성, 환경변수, 네트워크 구성 등을 Docker Engine API 명령으로 변환 
+-  Compose 자체가 직접 컨테이너를 실행하는 게 아니라, Docker 데몬(dockerd)에게 이런 컨테이너들을 이렇게 띄워줘 하고 요청을 보냄
+- Docker 데몬은 Docker 서버
+3. 우리가 설정한 Bridge 네트워크가 자동으로 만들어지고, 컨테이너 이름이 곧 DNS 호스트 이름이 됨
+4. 컨테이너를 읽어서 image:가 있으면 해당 이미지를 Pull (없으면 빌드), build:가 있으면 Dockerfile을 기반으로 Image Build, 환경변수 설정 (environment:), 포트 매핑 (ports:), 볼륨 마운트 (volumes:), 네트워크 연결
+5. depends_on을 참고해서 의존성이 있는 컨테이너를 먼저 실행
+- ex) mysql -> app 순서로
+6. depends_on은 단순히 시작 순서만 보장하지, 완전히 준비(ready) 되었는지는 모름, 따라서 실제 서비스에서는 헬스체크(healthcheck) 나 retry 로직을 추가함
+7. Spring Boot가 시작되며 application.yml 또는 환경변수에서 설정을 읽음
+8. 내부적으로 MySQL, Redis에 TCP 연결 시도, docker network 덕분에 IP 대신 이름으로 접근 가능
+9. 각 연결이 성공하면 애플리케이션이 정상적으로 구동됨
+
+## + Spring Boot는 docker-compose.yaml을 직접 읽지 않음
+- docker-compose.yaml은 Spring Boot와는 완전히 별개로, Docker 엔진이 해석하고 실행하는 설정 파일임
+- Spring Boot는 단지 컨테이너 내부의 환경변수나 네트워크 설정을 통해 간접적으로 그 설정의 결과만 이용함
+
+# 하나의 애플리케이션인데 MYSQL 이미지를 여러 개 정의했을 때, 실행 환경(버전, 설정 등)이 동일할 때
+- 이미지는 재사용되고, 컨테이너는 각각 새로 만들어짐
+- 컨테이너는 각각 고유한 데이터 저장소(볼륨)과 프로세스 공간을 가짐
+
+## 1. 하나의 이미지를 여러 서비스가 사용할 때
+- 이미지는 하나, 컨테이너는 두 개
+- 이미지는 새로 만들지 않고, 컨테이너는 서비스마다 하나씩 새로 생성해 실행환경은 동일하지만 데이터, 포트가 분리됨
+
+## 2. MYSQL 이미지를 아예 여러 개로 빌드해놧을 때
+- 각각으로부터 컨테이너가 새로 만들어짐
+- 내부 환경이 동일하더라도 이미지가 다르면 Docker는 완전히 별개로 인식해 실행 환경이 같더라도 이름이 다른 이미지면 Docker은 서로 다른 템플릿으로 취급함
+
+## + 왜 같은 이미지를 쓰더라도 컨테이너는 새로 만들어야 하는지
+- Docker의 격리 원칙 때문임
+- 컨테이너는 프로세스, 네트워크 인터페이스, 파일시스템 (쓰기 가능한 Layer), 환경변수를 독립적으로 유지해야 함
+- 컨테이너는 실행 단위기 때문에 하나의 MYSQL 프로세스를 여러 앱이 같이 쓰는 개념이 없음
+
 + 할 일
-- 분산 환경에서 애플리케이션이 여러 개 있을 때 MYSQL 컨테이너와 이미지를 그럴 때 마다 만드는지?
 - nginX 배포하는 데 있어 동작 원리나 과정
 - traefik은 뭔지 http/https
 - apache 서버는? 얘가 제일 오래된 것
 - yaml 비밀번호 환경변수 파일 분리
-- docker-compose.yaml 스프링 자바 내부 동작과정 확인
